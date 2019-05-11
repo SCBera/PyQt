@@ -8,16 +8,16 @@ class window(QMainWindow):
 
     def __init__(self):
         super(window, self).__init__()
-        self.setGeometry(50, 50, 500, 300)
-        self.setWindowTitle('pyqt5 Tut')
+        self.setGeometry(1000, 100, 300, 300)
+        self.setWindowTitle('Test!')
         # self.setWindowIcon(QIcon('pic.png'))
         self.home()
 
     def home(self):
         btn = QPushButton('quit', self)
         btn.clicked.connect(QCoreApplication.instance().quit)
-        btn.resize(100, 100)
-        btn.move(100, 100)
+        btn.resize(50, 30)  # size of the button (width, hight)
+        btn.move(200, 200)  # location
         self.show()
 
 
