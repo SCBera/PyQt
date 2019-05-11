@@ -1,7 +1,7 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QPushButton
-from PyQt5.QtGui import *
 from PyQt5.QtCore import QCoreApplication
+from PyQt5.QtGui import *
+from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QPushButton
 
 
 class window(QMainWindow):
@@ -9,16 +9,16 @@ class window(QMainWindow):
     def __init__(self):
         super(window, self).__init__()
         self.setGeometry(50, 50, 500, 300)
-        self.setWindowTitle('Test!')
-        # self.setWindowIcon(QIcon('Penguins.jpg'))
+        self.setWindowTitle('pyqt5 Tut')
+        # self.setWindowIcon(QIcon('pic.png'))
         self.home()
 
     def home(self):
-        btn = QPushButton('Quit', self)
+        btn = QPushButton('quit', self)
         btn.clicked.connect(QCoreApplication.instance().quit)
         btn.resize(100, 100)
         btn.move(100, 100)
-        btn.show()
+        self.show()
 
 
 def run():
