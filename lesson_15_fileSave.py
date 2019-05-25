@@ -10,18 +10,20 @@ import matplotlib.pyplot as plt
 
 class window(QMainWindow):
 
-    def __init__(self):
+    def __init__(self, win_width, win_height):
         super(window, self).__init__()
 
         ### defining window location and size ###
         self.xpos = 50
         self.ypos = 50
-        self.win_width = 500
-        self.win_hight = 300
+        self.win_width = win_width
+        self.win_height = win_height
+        # self.win_width = 500
+        # self win_height = 300
 
-        self.setGeometry(self.xpos, self.ypos, self.win_width, self.win_hight)
+        self.setGeometry(self.xpos, self.ypos, self.win_width/2, self.win_height/2)
         self.setWindowTitle('Test!')
-        self.setWindowIcon(QIcon('logo.png'))
+        self.setWindowIcon(QIcon('pic.png'))
 
         ## to do somthing extra ##
         extractAction = QAction('&Exit', self)
@@ -86,7 +88,7 @@ class window(QMainWindow):
     def save_file(self):
         name, _ = QFileDialog.getSaveFileName(self, 'Save file')
         text = self.textEdit.toPlainText()
-        with open(name, 'w') as f:
+        with open(name, 'w') as f: # this will close the file after use.
             f.write(text)
 
     def open_file(self):
@@ -95,9 +97,12 @@ class window(QMainWindow):
 
         print('file name:', name)
         self.editor()
-        with open(name, 'r') as f:
+        with open(name, 'r') as f: # this will close the file after use.
             text = f.read()
             self.textEdit.setText(text)
+
+        if f.closed:
+            print('File closed...')
         # print('file cont:', text)
         
 
@@ -105,7 +110,7 @@ class window(QMainWindow):
         btn = QPushButton('quit', self)
         btn.clicked.connect(self.close_application)
         btn.resize(btn.sizeHint())  # size of the button (width, hight)
-        btn.move(self.win_width - 100, self.win_hight - 40)  # location
+        btn.move(self.win_width - 100, self.win_height - 40)  # location
 
         checkBox = QCheckBox('Enlarge window', self)
         # checkBox.toggle() # to be checked from the beginning
@@ -140,6 +145,7 @@ class window(QMainWindow):
 
         self.show()
 
+
     def style_choice(self, text):
         self.styleChoice.setText(text)
         QApplication.setStyle(QStyleFactory.create(text))
@@ -154,9 +160,9 @@ class window(QMainWindow):
 
     def enlarge_window(self, state):
         if state == Qt.Checked:
-            self.setGeometry(50,50,1000,600)
+            self.setGeometry(self.xpos,self.ypos,self.win_width/1.3,self.win_height/1.3)
         else:
-            self.setGeometry(50,50,500,300)
+            self.setGeometry(self.xpos,self.ypos,self.win_width/2,self.win_height/2)
 
     def close_application(self):
         
@@ -175,7 +181,12 @@ if __name__ == "__main__":
 
     def run():
         app = QApplication(sys.argv)
-        Gui = window()
+        screen = app.primaryScreen()
+        screen_sz = screen.size() # returns the current system screen size
+        win_width = screen_sz.width()
+        win_height = screen_sz.height()
+        print(screen_sz)
+        Gui = window(win_width, win_height)
         sys.exit(app.exec_())
 
 run()
