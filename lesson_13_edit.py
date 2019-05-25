@@ -39,7 +39,8 @@ class window(QMainWindow):
         saveFile.setStatusTip('Save file')
         saveFile.triggered.connect(self.save_file)
 
-        openEditor = QAction('&Editor', self)
+        openEditor = QAction('& Open Editor', self)
+        saveFile.setShortcut('Ctrl+E')
         openEditor.triggered.connect(self.editor)
         fontChoice = QAction('&Font', self)
         fontChoice.triggered.connect(self.font_choice)
