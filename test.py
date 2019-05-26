@@ -23,9 +23,9 @@ class App(QMainWindow):
         self.width = 800
         self.height = 600
 
-        self.canvas = PlotCanvas(self, width=5, height=3)
+        self.canvas = PlotCanvas(self, width=6, height=3)
         self.canvas.move(50, 100)
-        self.toolbar = NavigationToolbar(self.canvas, self)
+        # self.toolbar = NavigationToolbar(self.canvas, self)
 
 
 
@@ -70,22 +70,24 @@ class App(QMainWindow):
             pass
 
 
-class PlotCanvas(FigureCanvas):
+class PlotCanvas(FigureCanvas, QDialog):
 
     def __init__(self, parent=None, width=5, height=4, dpi=100):
-        fig = Figure(figsize=(width, height), dpi=dpi)
-        self.axes = fig.add_subplot(211)
-        self.axes1 = fig.add_subplot(212)
+        self.fig = Figure(figsize=(width, height), dpi=dpi)
+        self.canvas = FigureCanvas(self.fig)
 
-        FigureCanvas.__init__(self, fig)
+        FigureCanvas.__init__(self, self.fig)
         self.setParent(parent)
 
         FigureCanvas.setSizePolicy(self,
                                    QSizePolicy.Expanding,
                                    QSizePolicy.Expanding)
         FigureCanvas.updateGeometry(self)
+        self.toolbar = NavigationToolbar(self.canvas, self)
+
+
         self.plot()
-        # self.toolbar = NavigationToolbar(self.fig)
+
 
     def plot(self):
         data = [random.random() for i in range(25)]
@@ -94,9 +96,9 @@ class PlotCanvas(FigureCanvas):
         ax1 = self.figure.add_subplot(212)
         ax1.plot(data, 'g-')
         ax.set_title('PyQt Matplotlib Example')
-        plt.tight_layout()
-        self.draw()
-
+        # plt.tight_layout()
+        self.canvas.draw()
+        # self.draw() # also works
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
