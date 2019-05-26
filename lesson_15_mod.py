@@ -7,6 +7,7 @@ from PyQt5.QtWidgets import *
 # from PyQt5.uic.properties import QtGui
 # from PyQt5.QtWidgets import QCheckBox, QProgressBar, QComboBox, QLabel, QStyleFactory
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
 import random
@@ -17,8 +18,13 @@ class window(QMainWindow):
         super(window, self).__init__()
 
         ### calling figure/plot
-        w_plot = PlotCanvas(self, width/5, height/5)
-        w_plot.move(10,10)
+        # self.w_plot = PlotCanvas(self, width/5, height/5)
+        # self.w_plot.move(10,10)
+
+        self.figure = plt.figure()
+        self.canvas = FigureCanvas(self.figure)
+
+        self.toolbar = NavigationToolbar(self.canvas, self)
 
         ### defining window location and size ###
         self.xpos = 50

@@ -5,6 +5,7 @@ from PyQt5.QtGui import QIcon
 
 
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
 
@@ -20,14 +21,26 @@ class App(QMainWindow):
         self.title = 'PyQt5 matplotlib example - pythonspot.com'
         self.width = 640
         self.height = 400
+
+        self.canvas = PlotCanvas(self, width=3, height=2)
+        self.canvas.move(50, 50)
+        self.toolbar = NavigationToolbar(self.canvas, self)
+
+        layout = QVBoxLayout()
+        layout.addWidget(self.toolbar)
+        layout.addWidget(self.canvas)
+        # layout.addWidget(self.button)
+        self.setLayout(layout)
         self.initUI()
 
     def initUI(self):
         self.setWindowTitle(self.title)
         self.setGeometry(self.left, self.top, self.width, self.height)
 
-        m = PlotCanvas(self, width=3, height=2)
-        m.move(50, 50)
+        # m = PlotCanvas(self, width=3, height=2)
+        # m.move(50, 50)
+        # toolbar = NavigationToolbar(m, self)
+        # self.addWidget(toolbar)
 
         button = QPushButton('PyQt5 button', self)
         button.setToolTip('This s an example button')
