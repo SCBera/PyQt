@@ -23,16 +23,18 @@ class window(QMainWindow):
 
         self.figure = plt.figure()
         self.canvas = FigureCanvas(self.figure)
+        # self.setCentralWidget(self.canvas)
 
         self.toolbar = NavigationToolbar(self.canvas, self)
+        # self.canvas.draw()
 
         ### defining window location and size ###
         self.xpos = 50
         self.ypos = 50
-        self.width = width
-        self.height = height
+        self.width = width/2
+        self.height = height/2
 
-        self.setGeometry(self.xpos, self.ypos, self.width/2, self.height/2)
+        self.setGeometry(self.xpos, self.ypos, self.width, self.height)
         self.setWindowTitle('Test!')
         self.setWindowIcon(QIcon('pic.png'))
 
@@ -40,7 +42,8 @@ class window(QMainWindow):
         extractAction = QAction('&Exit', self)
         extractAction.setShortcut('Ctrl+Q')
         extractAction.setStatusTip('Exit the app')
-        extractAction.triggered.connect(self.close_application)
+        extractAction.triggered.connect(self.plot)
+        # extractAction.triggered.connect(self.close_application)
         ## to open file ##
         openFile = QAction('&Open file', self)
         openFile.setShortcut('Ctrl+O')
@@ -79,8 +82,37 @@ class window(QMainWindow):
         # self.toolBar = self.addToolBar('extraction')
         # self.toolBar.addAction(extractAction)
 
+        # set the layout
+        layout = QVBoxLayout()
+        layout.addWidget(self.toolbar)
+        layout.addWidget(self.canvas)
+        layout.addWidget(self.canvas)
+        layout.addWidget(self.canvas)
+
 
         self.home()
+
+    def plot(self):
+        ''' plot some random stuff '''
+        # random data
+        data = [random.random() for i in range(10)]
+
+        # instead of ax.hold(False)
+        self.figure.clear()
+
+        # create an axis
+        ax1 = self.figure.add_subplot(211)
+        ax2 = self.figure.add_subplot(212)
+
+        # discards the old graph
+        # ax.hold(False) # deprecated, see above
+
+        # plot data
+        ax1.plot(data, '*-')
+        ax2.plot(data, 'r-')
+
+        # refresh canvas
+        self.canvas.draw()
 
     def color_picker(self):
         color = QColorDialog.getColor()
@@ -184,27 +216,27 @@ class window(QMainWindow):
             pass
             
 
-class PlotCanvas(FigureCanvas):
+# class PlotCanvas(FigureCanvas):
 
-    def __init__(self, parent=None, width=5, height=4, dpi=100):
-        fig = Figure(figsize=(width, height), dpi=dpi)
-        self.axes = fig.add_subplot(111)
+#     def __init__(self, parent=None, width=5, height=4, dpi=100):
+#         fig = Figure(figsize=(width, height), dpi=dpi)
+#         self.axes = fig.add_subplot(111)
 
-        FigureCanvas.__init__(self, fig)
-        self.setParent(parent)
+#         FigureCanvas.__init__(self, fig)
+#         self.setParent(parent)
 
-        FigureCanvas.setSizePolicy(self,
-                                   QSizePolicy.Expanding,
-                                   QSizePolicy.Expanding)
-        FigureCanvas.updateGeometry(self)
-        self.plot()
+#         FigureCanvas.setSizePolicy(self,
+#                                    QSizePolicy.Expanding,
+#                                    QSizePolicy.Expanding)
+#         FigureCanvas.updateGeometry(self)
+#         self.plot()
 
-    def plot(self):
-        data = [random.random() for i in range(25)]
-        ax = self.figure.add_subplot(111)
-        ax.plot(data, 'r-')
-        ax.set_title('PyQt Matplotlib Example')
-        self.draw()
+    # def plot1(self):
+    #     data = [random.random() for i in range(25)]
+    #     ax = self.figure.add_subplot(111)
+    #     ax.plot(data, 'r-')
+    #     ax.set_title('PyQt Matplotlib Example')
+    #     self.draw()
 
 
 if __name__ == "__main__":

@@ -1,6 +1,7 @@
 import sys
 
-from PyQt5.QtWidgets import QApplication, QMainWindow, QMenu, QVBoxLayout, QSizePolicy, QMessageBox, QWidget, QPushButton
+# from PyQt5.QtWidgets import QApplication, QMainWindow, QMenu, QVBoxLayout, QSizePolicy, QMessageBox, QWidget, QPushbtn
+from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QIcon
 
 
@@ -14,23 +15,28 @@ import random
 
 class App(QMainWindow):
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, parent=None):
+        super(App, self).__init__(parent)
         self.left = 50
         self.top = 50
         self.title = 'PyQt5 matplotlib example - pythonspot.com'
-        self.width = 640
-        self.height = 400
+        self.width = 800
+        self.height = 600
 
-        self.canvas = PlotCanvas(self, width=3, height=2)
-        self.canvas.move(50, 50)
+        self.canvas = PlotCanvas(self, width=5, height=3)
+        self.canvas.move(50, 100)
         self.toolbar = NavigationToolbar(self.canvas, self)
 
-        layout = QVBoxLayout()
-        layout.addWidget(self.toolbar)
-        layout.addWidget(self.canvas)
-        # layout.addWidget(self.button)
-        self.setLayout(layout)
+
+
+        # layout = QVBoxLayout()
+        # layout.addWidget(self.toolbar)
+        # layout.addWidget(self.canvas)
+        # # layout.addWidget(self.btn)
+        # self.setLayout(layout)
+
+        # self.statusBar()
+
         self.initUI()
 
     def initUI(self):
@@ -42,12 +48,26 @@ class App(QMainWindow):
         # toolbar = NavigationToolbar(m, self)
         # self.addWidget(toolbar)
 
-        button = QPushButton('PyQt5 button', self)
-        button.setToolTip('This s an example button')
-        button.move(500, 0)
-        button.resize(140, 100)
+        btn = QPushButton('Exit', self)
+        btn.setToolTip('This s an example btn')
+        btn.clicked.connect(self.close_application)
+        btn.move(700, 500)
+        btn.resize(btn.sizeHint())
+        # btn.resize(140, 100)
 
         self.show()
+
+    def close_application(self):
+
+        choice = QMessageBox.question(self, 'Message',
+                                      "Are you sure to quit?", QMessageBox.Yes |
+                                      QMessageBox.No, QMessageBox.No)
+
+        if choice == QMessageBox.Yes:
+            print('Quit application')
+            sys.exit()
+        else:
+            pass
 
 
 class PlotCanvas(FigureCanvas):
@@ -65,6 +85,7 @@ class PlotCanvas(FigureCanvas):
                                    QSizePolicy.Expanding)
         FigureCanvas.updateGeometry(self)
         self.plot()
+        # self.toolbar = NavigationToolbar(self.fig)
 
     def plot(self):
         data = [random.random() for i in range(25)]
