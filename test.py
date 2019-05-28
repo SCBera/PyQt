@@ -23,7 +23,22 @@ class App(QMainWindow):
         self.width = 800
         self.height = 600
 
-        self.canvas = PlotCanvas(self, width=6, height=3)
+        # self.fig = Figure(figsize=(width, height), dpi=dpi)
+        self.fig = Figure(figsize=(6, 3), dpi=100)
+        self.canvas = FigureCanvas(self.fig)
+
+        FigureCanvas.__init__(self, self.fig)
+        # self.setParent(parent)
+
+        FigureCanvas.setSizePolicy(self,
+                                   QSizePolicy.Expanding,
+                                   QSizePolicy.Expanding)
+        FigureCanvas.updateGeometry(self)
+
+        self.toolbar = NavigationToolbar(self.canvas, self)
+
+
+        # self.canvas = PlotCanvas(self, width=6, height=3)
         self.canvas.move(50, 100)
         # self.toolbar = NavigationToolbar(self.canvas, self)
 
@@ -48,12 +63,17 @@ class App(QMainWindow):
         # toolbar = NavigationToolbar(m, self)
         # self.addWidget(toolbar)
 
+        btn_plt = QPushButton('Update plot', self)
+        btn_plt.setToolTip('This will change the plot')
+        btn_plt.clicked.connect(self.plot1)
+        btn_plt.move(700, 400)
+        btn_plt.resize(btn_plt.sizeHint())
+
         btn = QPushButton('Exit', self)
-        btn.setToolTip('This s an example btn')
+        btn.setToolTip('This is an example btn')
         btn.clicked.connect(self.close_application)
         btn.move(700, 500)
         btn.resize(btn.sizeHint())
-        # btn.resize(140, 100)
 
         self.show()
 
@@ -69,6 +89,15 @@ class App(QMainWindow):
         else:
             pass
 
+    def plot1(self):
+        self.data = [random.random() for i in range(25)]
+        self.ax = self.figure.add_subplot(211)
+        self.ax.plot(self.data, 'r-')
+        self.ax1 = self.figure.add_subplot(212)
+        self.ax1.plot(self.data, 'g-')
+        self.ax.set_title('PyQt Matplotlib Example')
+        # plt.tight_layout()
+        self.canvas.draw()
 
 class PlotCanvas(FigureCanvas, QDialog):
 
@@ -86,7 +115,7 @@ class PlotCanvas(FigureCanvas, QDialog):
         self.toolbar = NavigationToolbar(self.canvas, self)
 
 
-        self.plot()
+        # self.plot()
 
 
     def plot(self):
