@@ -28,6 +28,7 @@ class AppForm(QMainWindow):
         self.create_main_frame()
         self.on_draw()
 
+
     def create_main_frame(self):
         self.main_frame = QWidget()
 
@@ -41,11 +42,23 @@ class AppForm(QMainWindow):
 
         self.canvas.mpl_connect('key_press_event', self.on_key_press)
 
+        self.btn1 = QPushButton('Test button 1')
+
         vbox = QVBoxLayout()
         vbox.addWidget(self.canvas)  # the matplotlib canvas
         vbox.addWidget(self.mpl_toolbar)
+
+        vbox.addWidget(self.btn1)
+
         self.main_frame.setLayout(vbox)
         self.setCentralWidget(self.main_frame)
+
+
+        ## not working...
+        self.btn2 = QPushButton('Test button 2')
+
+        hbox = QHBoxLayout()
+        hbox.addWidget(self.btn2)
 
     def get_data(self):
         return np.arange(20).reshape([4, 5]).copy()
