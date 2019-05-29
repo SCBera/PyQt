@@ -24,14 +24,14 @@ class AppForm(QMainWindow):
     def __init__(self, parent=None):
         QMainWindow.__init__(self, parent)
         #self.x, self.y = self.get_data()
-        self.data = self.get_data2()
+        self.data = self.get_data()
         self.create_main_frame()
         self.on_draw()
 
     def create_main_frame(self):
         self.main_frame = QWidget()
 
-        self.fig = Figure((5.0, 4.0), dpi=100)
+        self.fig = Figure((6.0, 4.0), dpi=100)
         self.canvas = FigureCanvas(self.fig)
         self.canvas.setParent(self.main_frame)
         self.canvas.setFocusPolicy(Qt.StrongFocus)
@@ -47,7 +47,7 @@ class AppForm(QMainWindow):
         self.main_frame.setLayout(vbox)
         self.setCentralWidget(self.main_frame)
 
-    def get_data2(self):
+    def get_data(self):
         return np.arange(20).reshape([4, 5]).copy()
 
     def on_draw(self):
