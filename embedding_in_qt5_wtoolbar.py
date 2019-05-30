@@ -30,16 +30,10 @@ class window(QMainWindow):
         self.ypos = 50
         self.width = width
         self.height = height
-        # self.width = 500
-        # self height = 300
-
         self.setGeometry(self.xpos, self.ypos, self.width/2, self.height/2)
         self.setWindowTitle('Test!')
 
-        #self.x, self.y = self.get_data()
-        # self.data = self.get_data()
         self.create_main_frame()
-        # self.on_draw()
 
 
         ## to open file ##
@@ -60,7 +54,6 @@ class window(QMainWindow):
         quitAction.setStatusTip('Close the window!')
         quitAction.triggered.connect(self.close_application)
 
-        self.statusBar()
 
         mainMenu = self.menuBar()
         fileMenu = mainMenu.addMenu('&File')
@@ -68,16 +61,18 @@ class window(QMainWindow):
         fileMenu.addAction(saveFile)
         fileMenu.addAction(quitAction)
 
+        # this is not showing!!!
         test_btn = QPushButton('Test')
-
         test_btn.resize(test_btn.sizeHint())  # size of the button (width, hight)
         test_btn.move(self.width - 100, self.height - 40)  # location
+
+        self.statusBar()
 
     def create_main_frame(self):
         self.main_frame = QWidget()
 
-        # self.fig = Figure()
-        self.fig = Figure((3.0, 2.0), dpi=100)
+        self.fig = Figure(tight_layout=True) # auto size
+        # self.fig = Figure((3.0, 2.0), dpi=100)
         self.canvas = FigureCanvas(self.fig)
         self.canvas.setParent(self.main_frame)
         # self.canvas.setFocusPolicy(Qt.StrongFocus)
@@ -90,10 +85,12 @@ class window(QMainWindow):
 
 
 
+        self.btn = QPushButton('No Action')
+        # self.btn.clicked.connect(self.plot_static)
         self.btn_plot = QPushButton('Plot')
         self.btn_plot.clicked.connect(self.plot_static)
         self.btn_plot_nxt = QPushButton('Plot next')
-        self.btn_plot_nxt.clicked.connect(self.on_draw)
+        self.btn_plot_nxt.clicked.connect(self.plot_dynamic)
         self.exit_btn = QPushButton('Exit!')
         self.exit_btn.clicked.connect(self.close_application)
 
@@ -102,23 +99,26 @@ class window(QMainWindow):
         self.main_frame.setLayout(mainHbox)
         self.setCentralWidget(self.main_frame)
 
-        vbox = QVBoxLayout()
-        vbox.addWidget(self.canvas)  # the matplotlib canvas
-        vbox.addWidget(self.mpl_toolbar)
+        vplotbox = QVBoxLayout()
+        vplotbox.addWidget(self.canvas)  # the matplotlib canvas
+        vplotbox.addWidget(self.mpl_toolbar)
 
-        # vbox.addWidget(self.btn_plot)
-        vbox.addWidget(self.btn_plot_nxt)
+        hbox1 = QHBoxLayout()
+        hbox1.addWidget(self.btn_plot)
+        hbox1.addWidget(self.btn_plot_nxt)
 
-        # mainHbox = QHBoxLayout()
+        vbox1 = QVBoxLayout()
+        vbox1.addWidget(self.exit_btn)
+        # vbox1.addWidget(self.btn_plot_nxt)
 
-        # self.main_frame.setLayout(mainHbox)
-        # self.setCentralWidget(self.main_frame)
+        vbox2 = QVBoxLayout()
+        vbox2.addWidget(self.btn)
+        # vbox2.addWidget(self.btn_plot_nxt)
 
-        mainHbox.addLayout(vbox)
-        # hbox.addWidget(self.exit_btn)
-        mainHbox.addWidget(self.btn_plot)
-        # mainHbox.addWidget(self.btn_plot_nxt)
-        # mainHbox.addWidget(self.exit_btn)
+        mainHbox.addLayout(vplotbox)
+        mainHbox.addLayout(vbox1)
+        mainHbox.addLayout(vbox2)
+        vplotbox.addLayout(hbox1)
 
 
 
@@ -145,16 +145,30 @@ class window(QMainWindow):
 
     def plot_static(self):
         self.fig.clear()
-        self.axes = self.fig.add_subplot(111)
-        self.axes.plot(range(10), 'o-')
+        self.ax1 = self.fig.add_subplot(211)
+        self.ax1.plot(range(10), 'o-')
+        self.ax1.set_title('Static plot')
+        self.ax1.set_xlabel('x label')
+        self.ax1.set_ylabel('y label')
+
+        self.ax2 = self.fig.add_subplot(212)
+        self.ax2.plot(self.get_data(), 's-')
+        self.ax2.set_title('Dynamic plot')
+        self.ax2.set_xlabel('x label')
+        self.ax2.set_ylabel('y label')
         # self.axes.imshow(self.data, interpolation='nearest')
         self.canvas.draw()
 
-    def on_draw(self):
+    def plot_dynamic(self):
         self.data = self.get_data()
-        self.fig.clear() # this will clear the old plot if recalled
-        self.axes = self.fig.add_subplot(111)
-        self.axes.plot(self.data, 'o-')
+        # self.fig.clear() # this will clear the old plot if recalled
+        self.ax2 = self.fig.add_subplot(212)
+        # self.ax2.clf() # not working
+        self.ax2.hold(False)
+        self.ax2.plot(self.data, 's-')
+        self.ax2.set_title('Dynamic plot')
+        self.ax2.set_xlabel('x label')
+        self.ax2.set_ylabel('y label')
         # self.axes.imshow(self.data, interpolation='nearest')
         self.canvas.draw()
 
