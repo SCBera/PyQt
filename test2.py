@@ -32,7 +32,7 @@ class MyMplCanvas(FigureCanvas):
         fig = Figure(figsize=(width, height), dpi=dpi)
         self.axes = fig.add_subplot(111)
         # We want the axes cleared every time plot() is called
-        # self.axes.hold(False) # depricated
+        self.axes.hold(False) # depricated
         # self.axes.clear() # not working
 
         self.compute_initial_figure()
@@ -46,7 +46,7 @@ class MyMplCanvas(FigureCanvas):
                                    QSizePolicy.Expanding)
         FigureCanvas.updateGeometry(self)
 
-        self.toolbar = NavigationToolbar(self)
+        # self.toolbar = NavigationToolbar(FigureCanvas, self)
 
     def compute_initial_figure(self):
         pass
