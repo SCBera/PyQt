@@ -10,18 +10,18 @@ import matplotlib.pyplot as plt
 
 class window(QMainWindow):
 
-    def __init__(self, win_width, win_height):
+    def __init__(self, width, height):
         super(window, self).__init__()
 
         ### defining window location and size ###
         self.xpos = 50
         self.ypos = 50
-        self.win_width = win_width
-        self.win_height = win_height
-        # self.win_width = 500
-        # self win_height = 300
+        self.width = width
+        self.height = height
+        # self.width = 500
+        # self height = 300
 
-        self.setGeometry(self.xpos, self.ypos, self.win_width/2, self.win_height/2)
+        self.setGeometry(self.xpos, self.ypos, self.width/2, self.height/2)
         self.setWindowTitle('Test!')
         self.setWindowIcon(QIcon('pic.png'))
 
@@ -110,7 +110,7 @@ class window(QMainWindow):
         btn = QPushButton('quit', self)
         btn.clicked.connect(self.close_application)
         btn.resize(btn.sizeHint())  # size of the button (width, hight)
-        btn.move(self.win_width - 100, self.win_height - 40)  # location
+        btn.move(self.width - 100, self.height - 40)  # location
 
         checkBox = QCheckBox('Enlarge window', self)
         # checkBox.toggle() # to be checked from the beginning
@@ -160,9 +160,9 @@ class window(QMainWindow):
 
     def enlarge_window(self, state):
         if state == Qt.Checked:
-            self.setGeometry(self.xpos,self.ypos,self.win_width/1.3,self.win_height/1.3)
+            self.setGeometry(self.xpos,self.ypos,self.width/1.3,self.height/1.3)
         else:
-            self.setGeometry(self.xpos,self.ypos,self.win_width/2,self.win_height/2)
+            self.setGeometry(self.xpos,self.ypos,self.width/2,self.height/2)
 
     def close_application(self):
         
@@ -183,10 +183,10 @@ if __name__ == "__main__":
         app = QApplication(sys.argv)
         screen = app.primaryScreen()
         screen_sz = screen.size() # returns the current system screen size
-        win_width = screen_sz.width()
-        win_height = screen_sz.height()
+        width = screen_sz.width()
+        height = screen_sz.height()
         print(screen_sz)
-        Gui = window(win_width, win_height)
+        Gui = window(width, height)
         sys.exit(app.exec_())
 
 run()
